@@ -1,0 +1,22 @@
+const e = require('express');
+const mongoose = require('mongoose');
+const usersModel = require('../models/usersModel')
+
+const newUserController = {};
+
+newUserController.createUser = (req, res, next) => {
+    const { userNameInput, passwordInput } = req.body;
+    usersModel.Users.create({
+        username : userNameInput,
+        password : passwordInput
+    }, (err, data) => {
+        if (err) {
+            console.log(err);
+        }
+        console.log('new user created');
+        res.locals.data = data;
+        next();
+    })
+}
+module.exports = newUserController;
+

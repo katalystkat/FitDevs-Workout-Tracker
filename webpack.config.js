@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
 const path = require('path');
 
 module.exports = {
@@ -17,7 +18,7 @@ module.exports = {
                   loader: 'babel-loader',
                   options: {
                     presets: ['@babel/preset-env', '@babel/preset-react']
-                  }
+                  } 
                 },
               },
             {
@@ -45,9 +46,24 @@ module.exports = {
         }),
     ],
     devServer: {
+        host: 'localhost',
+        port: 8080,
+        // enable HMR on the devServer
+        hot: true,
+        // fallback to root for other urls
+        historyApiFallback: true,
+        // What is historyApiFallback? 
         static: {
             directory: path.join(__dirname, './build'),
-        }
+            publicPath: '/',
+        },
+        headers: { 'Access-Control-Allow-Origin': '*' },
+        proxy: {
+            '/api': {
+              target: 'http://localhost:3000',
+              pathRewrite: { '^/api': '' },
+            },
+          },      
     },
     devtool: 'eval-source-map',
 }
