@@ -51,9 +51,10 @@ userController.logWorkout = (req, res, next) => {
     //     activityDescription : activityDescriptionInput,}] }]
     // }
     // setting new option to true returns the document after update was applied
+
     const filter = {username : userNameInput};
-    const update = {workouts : workout }
-    usersModel.User.findOneAndUpdate(filter, update, {upsert: true, new: true}, (err, data) => {
+    const update = {workouts : workouts.push(workout) }
+    usersModel.User.findOneAndUpdate(filter, update, {upsert: true, new: true},(err, data) => {
         if (err) {
             return console.log(err);
         }
@@ -61,11 +62,11 @@ userController.logWorkout = (req, res, next) => {
             console.log('workout log invalid');
             next(err);
         }
-        // console.log(workout);
-        // data.workouts.push(workout)
+        console.log('correct middleware');
         res.status(200).end();
     })
-    // console.log(userNameInput);
+    
+    console.log('in the router');    
 
     // usersModel.User.findOne( {username : userNameInput}, (err, data) => {
     //     if (err) {
@@ -77,8 +78,8 @@ userController.logWorkout = (req, res, next) => {
     //     }
     //     console.log('hi' + data);
     //     console.log(workout);
-    //     data.workouts.push(workout)
-    //     next();
+    //     data.workouts.push(workout);
+    //     res.status(200).end();
     // })
 
     
