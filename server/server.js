@@ -11,8 +11,8 @@ const PORT = 3000;
 /**
  * handle parsing request body
  */
- app.use(express.json());
- app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
  
  /**
   * handle requests for static files
@@ -20,16 +20,20 @@ const PORT = 3000;
 app.use(express.static(path.resolve(__dirname, '../client')));
 app.use('/api', apiRouter);
 
-app.get('/api/signin', (req, res)=> {
-    res.status(200).send('Sign In Page');
-})
+// app.get('/api/signin', (req, res)=> {
+//     res.status(200).send('Sign In Page');
+// })
 
-app.get('/api/communityprogress', (req, res)=> {
-    res.status(200).send('Community Progress Page');
-})
+// app.get('/api/communityprogress', (req, res)=> {
+//     res.status(200).send('Community Progress Page');
+// })
 /**
  * start server
  */
+ 
+app.use((req, res) => res.status(404).send('This is not the page you\'re looking for...'));
+
+
 app.listen(PORT, () => {
     console.log(`Server listening on port: ${PORT}...`);
   });

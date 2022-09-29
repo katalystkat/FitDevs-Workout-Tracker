@@ -1,6 +1,6 @@
 const express = require('express');
-const loginController = require('../controllers/loginController');
-const newUserController = require('../controllers/newUserController');
+const userController = require('../controllers/userController');
+const cookieController = require('../controllers/cookieController');
 const router = express.Router();
 
 
@@ -9,8 +9,16 @@ router.get('/',
 );
 
 router.post('/newUser', 
-    newUserController.createUser,
+    userController.createUser,
     (req, res) => res.status(200).json(res.locals.data)
 );
+
+router.post('/loginUser', 
+    userController.checkUser, cookieController.setCookie)
+    // (req, res) => res.status(200).json(res.locals.userName)
+
+router.post('/logworkout', 
+    // cookieController.checkCookie, 
+    userController.logWorkout);
 
 module.exports = router;

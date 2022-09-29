@@ -58,12 +58,13 @@ module.exports = {
             publicPath: '/',
         },
         headers: { 'Access-Control-Allow-Origin': '*' },
-        proxy: {
-            '/api': {
-              target: 'http://localhost:3000',
-              pathRewrite: { '^/api': '' },
-            },
-          },      
+    //     proxy: {
+    //       '/api': {
+    //       target: 'http://localhost:3000',
+    //       pathRewrite: { '^/api': '' },
+    //   },
+    // },
+
     },
     devtool: 'eval-source-map',
 }

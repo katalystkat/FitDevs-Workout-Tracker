@@ -1,0 +1,121 @@
+const e = require('express');
+const mongoose = require('mongoose');
+const usersModel = require('../models/usersModel')
+const userController = {};
+
+userController.createUser = (req, res, next) => {
+    const { userNameInput, passwordInput } = req.body;
+    usersModel.User.create({
+        username : userNameInput,
+        password : passwordInput
+    }, (err, data) => {
+        if (err) {
+            return console.log(err);
+        }
+        console.log('new user created');
+        res.locals.data = data;
+        next();
+    })
+}
+
+userController.checkUser = (req, res, next) => {
+    const { userNameInput, passwordInput } = req.body;
+    usersModel.User.findOne({username: userNameInput, password : passwordInput}, (err, data) => {
+        if (err) {
+            return console.log(err);
+        }
+        else if (data === null){
+            console.log("Login Invalid");
+            res.status(400).json('login invalid');
+            return next();
+        }
+        res.locals.user_id = data._id;
+        console.log('correct username input');
+        next();
+    })
+}
+
+userController.logWorkout = (req, res, next) => {
+    const { dateInput, userNameInput, activityNameInput, activityMetricInput, activityDescriptionInput } = req.body;
+    const workoutDetails = {
+        'activityName' : activityNameInput, 
+        'activityMetric' : activityMetricInput, 
+        'activityDescription' : activityDescriptionInput,
+    }
+    const workout = {'date' : dateInput}
+    workout.activities = workoutDetails;
+    
+    // const update = { workouts : [ {date : dateInput, activities : [ {
+    //     activityName : activityNameInput, 
+    //     activityMetric : activityMetricInput, 
+    //     activityDescription : activityDescriptionInput,}] }]
+    // }
+    // setting new option to true returns the document after update was applied
+    const filter = {username : userNameInput};
+    const update = {workouts : workout }
+    usersModel.User.findOneAndUpdate(filter, update, {upsert: true, new: true}, (err, data) => {
+        if (err) {
+            return console.log(err);
+        }
+        else if (data === null){
+            console.log('workout log invalid');
+            next(err);
+        }
+        // console.log(workout);
+        // data.workouts.push(workout)
+        res.status(200).end();
+    })
+    // console.log(userNameInput);
+
+    // usersModel.User.findOne( {username : userNameInput}, (err, data) => {
+    //     if (err) {
+    //         return console.log(err);
+    //     }
+    //     else if (data === null){
+    //         console.log('workout log invalid');
+    //         next(err);
+    //     }
+    //     console.log('hi' + data);
+    //     console.log(workout);
+    //     data.workouts.push(workout)
+    //     next();
+    // })
+
+    
+    // 63351560fac37c2e7s8a7905e
+}
+// userController.logWorkoutDetails = (req, res, next) => {
+//     const { dateInput, activityNameInput, activityMetricInput, activityDescriptionInput } = req.body;
+//     usersModel.Activity.create({
+//         activityName : activityNameInput, 
+//         activityMetric : activityMetricInput, 
+//         activityDescription : activityDescriptionInput,
+//     }, (err, data) => {
+//         if (err) {
+//             return console.log(err);
+//         }
+//         console.log('Activity details logged');
+//         res.locals.workoutDetails = data;
+//         res.locals.dateInput = dateInput
+//         res.status(200).json(data).end();
+//         // next();
+//     })
+// }
+
+// userController.logWorkout = (req, res, next) => {
+//     usersModel.Workout.create({
+//         date : res.locals.dateInput, 
+//         activites : res.locals.workoutDetails,
+//     }, (err, data) => {
+//         if (err) {
+//             return console.log(err);
+//         }
+//         console.log('Workout Logged');
+//         next();
+//     })
+// }
+
+
+
+module.exports = userController;
+
