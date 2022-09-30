@@ -3,7 +3,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 const path = require('path');
 
 module.exports = {
-    entry: './client/index.js',
+    entry: './client/index.jsx',
     output: {
         path: path.resolve(__dirname, 'build'),
         filename: 'bundle.js',

@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const cors = require('cors');
 
 const app = express();
 const apiRouter = require('./routes/api');
@@ -11,6 +12,7 @@ const PORT = 3000;
 /**
  * handle parsing request body
  */
+app.use(cors({credentials: true, origin: 'http://localhost:8080'}))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
  
@@ -18,6 +20,9 @@ app.use(express.urlencoded({ extended: true }));
   * handle requests for static files
   */
 app.use(express.static(path.resolve(__dirname, '../client')));
+app.get('/dashboard', (req, res) => {
+  res.sendFile('/Users/katalystkat/Documents/codesmith/FitDevs-Workout-Tracker/client/dashboard.html');
+})
 app.use('/api', apiRouter);
 
 // app.get('/api/signin', (req, res)=> {

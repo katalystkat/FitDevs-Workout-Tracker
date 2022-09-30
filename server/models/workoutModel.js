@@ -12,7 +12,7 @@ mongoose.connect(MONGO_URI, {
 const Schema = mongoose.Schema;
 
 const workoutSchema = new Schema({
-    username: {type: String, required: true},
+    username: {type: String, required: false},
     activityName: {type: String, required: true},
     activityMetric: {type: Number, required: true},
     activityDescription : {type: String, required: true},

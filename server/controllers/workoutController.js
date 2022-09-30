@@ -16,8 +16,8 @@ workoutController.logWorkout = (req, res, next) => {
             return console.log(err);
         }
         console.log('new workout logged');
-        console.log(data);
-        res.status(200).end();
+        res.locals.data = data;
+        res.status(200).json(res.locals.data);
     })
 }
 
